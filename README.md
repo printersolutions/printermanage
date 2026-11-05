@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="https://printerhelpplus.com/">
-    <img src="https://img.shields.io/badge/Printer%20Support-PrinterHelpPlus-1769AA?style=for-the-badge&logo=googlechrome&logoColor=white" alt="PrinterHelpPlus">
+    <img src="https://img.shields.io/badge/Printer%20Support-PrinterHelpPlus-1769AA?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Printer Help Plus">
   </a>
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue?style=for-the-badge" alt="Platforms">
   <img src="https://img.shields.io/badge/Project-Open%20Source-16A6A0?style=for-the-badge" alt="Open Source">
@@ -204,7 +204,7 @@ PrintCommand/
 
 ## 🌐 Need More Printer Support?
 
-If you need more help with printer troubleshooting, installation, configuration, network connectivity, driver issues, or other printing-related problems, visit **[PrinterHelpPlus](https://printerhelpplus.com/)** for additional support and helpful resources.
+If you need more help with printer troubleshooting, installation, configuration, network connectivity, driver issues, or other printing-related problems, visit **[Printer Help Plus](https://printerhelpplus.com/)** for additional support and helpful resources.
 
 ## 🤝 Contributing
 
