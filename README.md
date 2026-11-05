@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="https://printerhelpplus.com/">
-    <img src="https://img.shields.io/badge/Printer%20Help-Get%20Support-1769AA?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Printer Help">
+    <img src="https://img.shields.io/badge/Printer%20Support-PrinterHelpPlus-1769AA?style=for-the-badge&logo=googlechrome&logoColor=white" alt="PrinterHelpPlus">
   </a>
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue?style=for-the-badge" alt="Platforms">
   <img src="https://img.shields.io/badge/Project-Open%20Source-16A6A0?style=for-the-badge" alt="Open Source">
@@ -20,7 +20,7 @@
 
 ## 📌 About PrintCommand
 
-**PrintCommand** is a printer troubleshooting and technical reference project created to help users understand and resolve common printing problems using practical commands and step-by-step instructions.
+**PrintCommand** is a printer troubleshooting and technical reference project designed to help users diagnose and resolve common printing problems using practical commands and step-by-step instructions.
 
 From identifying network devices with `arp -a` to diagnosing connectivity issues, managing printer services, and troubleshooting stuck print jobs, PrintCommand brings useful technical resources together in one organized collection.
 
@@ -68,7 +68,7 @@ Useful commands and utilities for accessing printer settings and managing instal
 | `printmanagement.msc` | Open Print Management, if available |
 | `services.msc` | Open Windows Services |
 | `devmgmt.msc` | Open Device Manager |
-| `printui /s /t2` | Open printer driver management |
+| `printui /s /t2` | Open Print Server Properties and the Drivers tab |
 | `Get-Printer` | List installed printers |
 | `Get-PrinterDriver` | List installed printer drivers |
 | `Get-PrinterPort` | List printer ports |
@@ -202,21 +202,9 @@ PrintCommand/
 └── CONTRIBUTING.md
 ```
 
-## 🌐 Additional Printer Support
+## 🌐 Need More Printer Support?
 
-Need help with printer installation, configuration, network connectivity, driver issues, or troubleshooting?
-
-<p align="center">
-  <a href="https://printerhelpplus.com/">
-    <img src="https://img.shields.io/badge/VISIT%20PRINTER%20HELP%20PLUS-Get%20Additional%20Printer%20Support-1769AA?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Visit PrinterHelpPlus">
-  </a>
-</p>
-
-**If you need more help, please visit our website:**
-
-### 👉 https://printerhelpplus.com/
-
-Explore additional printer support resources and get help with printing-related problems.
+If you need more help with printer troubleshooting, installation, configuration, network connectivity, driver issues, or other printing-related problems, visit **[PrinterHelpPlus](https://printerhelpplus.com/)** for additional support and helpful resources.
 
 ## 🤝 Contributing
 
@@ -260,5 +248,7 @@ This project is distributed under the MIT License. See the `LICENSE` file for de
   <br>
   Making Printer Troubleshooting Simpler.
   <br><br>
-  <a href="https://printerhelpplus.com/">PrinterHelpPlus.com</a>
+  Need additional printer support?
+  <br>
+  <a href="https://printerhelpplus.com/"><strong>Visit PrinterHelpPlus</strong></a>
 </p>
