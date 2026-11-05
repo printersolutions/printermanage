@@ -243,12 +243,4 @@ This project is distributed under the MIT License. See the `LICENSE` file for de
 
 ---
 
-<p align="center">
-  <strong>🖨️ PrintCommand</strong>
-  <br>
-  Making Printer Troubleshooting Simpler.
-  <br><br>
-  Need additional printer support?
-  <br>
-  <a href="https://printerhelpplus.com/"><strong>Visit PrinterHelpPlus</strong></a>
-</p>
+
