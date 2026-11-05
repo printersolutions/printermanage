@@ -235,7 +235,7 @@ Some commands require administrator privileges and may change system configurati
 
 Driver downloads and manufacturer support resources should be obtained from official manufacturer websites.
 
-PrintCommand and PrinterHelpPlus are independent resources and are not officially affiliated with HP, Canon, Epson, Brother, Xerox, Ricoh, or other printer manufacturers.
+PrintCommand and Printer Help Plus are independent resources and are not officially affiliated with HP, Canon, Epson, Brother, Xerox, Ricoh, or other printer manufacturers.
 
 ## 📄 License
 
