@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Copy-ready printer troubleshooting commands for Windows, macOS and Linux: arp -a, ping, spooler resets, CUPS queue fixes and more.">
+<meta name="theme-color" content="#0d1220">
+<title>PrintFix — Printer Troubleshooting Commands</title>
+<style>
+  :root{
+    --bg:#0d1220; --panel:#151c2e; --panel2:#1b2438; --line:#263149;
+    --text:#e8edf7; --muted:#93a1bd; --accent:#1986d2; --accent2:#5ab0ea;
+    --warn:#fbbf24; --ok:#34d399; --danger:#f87171;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+  a{color:var(--accent)}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(13,18,32,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;gap:12px;padding:14px 0}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:.2px}
+  .logo svg{color:var(--accent)}
+  .nav .tag{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:3px 10px;border-radius:999px}
+
+  .hero{padding:52px 0 26px;text-align:center}
+  .hero h1{font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.15;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);max-width:640px;margin:14px auto 0;font-size:16px}
+
+  .searchbar{max-width:640px;margin:26px auto 0;position:relative}
+  .searchbar input{width:100%;padding:14px 48px 14px 46px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:16px;outline:none}
+  .searchbar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(25,134,210,.15)}
+  .searchbar .icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .searchbar kbd{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 7px;background:var(--panel2)}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:34px 0 8px}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:left}
+  .step .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:rgba(25,134,210,.15);color:var(--accent);font-weight:800;font-size:13px;margin-bottom:8px}
+  .step h3{font-size:14px;margin-bottom:4px}
+  .step p{font-size:13px;color:var(--muted)}
+  .step code{font-family:var(--mono);font-size:12px;color:var(--accent);background:rgba(25,134,210,.1);padding:1px 6px;border-radius:6px}
+
+  .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:30px 0 18px}
+  .chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:8px 16px;border-radius:999px;font-size:14px;cursor:pointer;transition:.15s}
+  .chip:hover{border-color:var(--accent);color:var(--text)}
+  .chip.active{background:rgba(25,134,210,.15);border-color:var(--accent);color:var(--accent);font-weight:600}
+  .count{margin-left:auto;font-size:13px;color:var(--muted)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;padding-bottom:40px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;transition:.15s}
+  .card:hover{border-color:#33436a;transform:translateY(-2px)}
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .card h3{font-size:16px;font-weight:700}
+  .badge{flex-shrink:0;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.4px}
+  .badge.win{background:rgba(25,134,210,.15);color:var(--accent)}
+  .badge.mac{background:rgba(129,140,248,.18);color:#a5b4fc}
+  .badge.linux{background:rgba(52,211,153,.15);color:var(--ok)}
+  .badge.all{background:rgba(147,161,189,.15);color:var(--muted)}
+  .badge.admin{background:rgba(251,191,36,.15);color:var(--warn)}
+  .desc{font-size:14px;color:var(--muted)}
+  .cmd{position:relative;background:#0a0f1c;border:1px solid var(--line);border-radius:10px;padding:12px 44px 12px 12px;font-family:var(--mono);font-size:13px;color:#7cc4f2;overflow-x:auto;white-space:pre}
+  .copy{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+  .copy:hover{color:var(--accent);border-color:var(--accent)}
+  .copy.copied{color:var(--ok);border-color:var(--ok)}
+  .chip:focus-visible,.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .note{font-size:12.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+  .note.warn{border-color:var(--warn);color:#d9c07a}
+  .empty{display:none;text-align:center;color:var(--muted);padding:60px 0}
+  .empty.show{display:block}
+
+  footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:13px;text-align:center}
+  footer code{font-family:var(--mono);color:var(--accent)}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel2);border:1px solid var(--ok);color:var(--ok);padding:10px 20px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:100}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{border-color:var(--danger);color:var(--danger)}
+
+  @media (max-width:600px){
+    .hero{padding-top:36px}
+    .grid{grid-template-columns:1fr}
+    .count{margin-left:0;width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      PrintFix
+    </div>
+    <span class="tag">Printer troubleshooting commands</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Fix printers fast,<br>one command at a time.</h1>
+    <p>Copy-ready commands for Windows, macOS and Linux. Find the printer's IP, test the connection, clear stuck jobs and restart the spooler — no guesswork.</p>
+    <div class="searchbar">
+      <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search commands… (e.g. ping, spooler, queue)" autocomplete="off" aria-label="Search printer commands">
+      <kbd>/</kbd>
+    </div>
+  </section>
+
+  <section class="steps" aria-label="Quick fix flow">
+    <div class="step"><span class="n">1</span><h3>Check the basics</h3><p>Power, paper, ink/toner, USB cable or Wi-Fi light. Print a config page from the printer's own menu.</p></div>
+    <div class="step"><span class="n">2</span><h3>Find the IP</h3><p>Run <code>arp -a</code> and match the printer's MAC address from its label or config page.</p></div>
+    <div class="step"><span class="n">3</span><h3>Test the connection</h3><p><code>ping 192.168.1.50</code> — replies mean the printer is reachable on the network.</p></div>
+    <div class="step"><span class="n">4</span><h3>Still stuck?</h3><p>Clear the print queue and restart the spooler with the commands below, then reinstall the driver.</p></div>
+  </section>
+
+  <div class="toolbar">
+    <button type="button" class="chip active" data-cat="all" aria-pressed="true">All</button>
+    <button type="button" class="chip" data-cat="network" aria-pressed="false">Network</button>
+    <button type="button" class="chip" data-cat="windows" aria-pressed="false">Windows</button>
+    <button type="button" class="chip" data-cat="mac" aria-pressed="false">macOS</button>
+    <button type="button" class="chip" data-cat="linux" aria-pressed="false">Linux</button>
+    <span class="count" id="count" role="status" aria-live="polite"></span>
+  </div>
+
+  <section class="grid" id="grid"></section>
+  <div class="empty" id="empty">
+    <p>No commands match your search.</p>
+    <p style="margin-top:6px;font-size:13px">Try “ping”, “spooler”, “queue” or “ip”.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Safe by design:</strong> this page only copies commands — it never runs them. Commands marked <em>Admin</em> need an elevated Command Prompt/PowerShell on Windows, or <code>sudo</code> on macOS/Linux. Replace <code>192.168.1.50</code> with your printer's actual IP address.</p>
+    <p style="margin-top:8px">PrintFix — a quick reference, not a substitute for your printer's official support docs.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Copied to clipboard ✓</div>
+
+<script>
+const COMMANDS = [
+  {
+    title:"Find the printer's IP address",
+    cmd:"arp -a",
+    desc:"Shows the local ARP cache: recent IPv4 addresses and their MAC addresses. Match the MAC on the printer's label or network config page.",
+    cat:["network"], os:"all", osLabel:"All systems",
+    note:"This is a cache, not a full network scan. The printer's own network/config page is the most reliable way to find its IP."
+  },
+  {
+    title:"Test if the printer is reachable",
+    cmd:"ping 192.168.1.50",
+    desc:"Checks whether your computer can reach the printer over the network. Replies = connection OK.",
+    cat:["network"], os:"all", osLabel:"All systems",
+    note:"“Request timed out” can mean wrong IP, printer offline, or a firewall / guest Wi-Fi blocking it. On macOS/Linux press Ctrl+C to stop a continuous ping."
+  },
+  {
+    title:"Check your network settings",
+    cmd:"ipconfig",
+    desc:"Shows your computer's IP and gateway. The printer should be on the same subnet (e.g. both 192.168.1.x).",
+    cat:["network","windows"], os:"win", osLabel:"Windows",
+    note:"On macOS/Linux use: ifconfig  or  ip a"
+  },
+  {
+    title:"Resolve the printer's hostname",
+    cmd:"nslookup printer-name",
+    desc:"Turns the printer's network name into an IP address. Useful when the printer was added by name instead of IP.",
+    cat:["network"], os:"all", osLabel:"All systems",
+    note:"If it fails, add the printer by IP address instead of hostname."
+  },
+  {
+    title:"Test the raw printing port",
+    cmd:"Test-NetConnection 192.168.1.50 -Port 9100",
+    desc:"PowerShell check: is the printer's RAW printing port (9100) open? TcpTestSucceeded : True means yes.",
+    cat:["network","windows"], os:"win", osLabel:"Windows · PS",
+    note:"Also try port 631 (IPP) or 515 (LPR) if 9100 fails."
+  },
+  {
+    title:"Open Devices and Printers",
+    cmd:"control printers",
+    desc:"Jump straight to the Windows printers panel to set a default printer, open the queue or remove a device.",
+    cat:["windows"], os:"win", osLabel:"Windows",
+    note:"Run it from Win + R (Run dialog) or Command Prompt."
+  },
+  {
+    title:"List installed printers",
+    cmd:"Get-Printer | Format-Table Name, DriverName, PortName",
+    desc:"PowerShell: shows every installed printer with its driver and port — great for spotting a wrong or WSD port.",
+    cat:["windows"], os:"win", osLabel:"Windows · PS",
+    note:"Look for a port like IP_192.168.1.50. A WSD port can cause random offline errors."
+  },
+  {
+    title:"Restart the print spooler",
+    cmd:"Restart-Service Spooler",
+    desc:"PowerShell (Admin): restarts the Windows print service. Fixes many stuck-queue and “printer offline” errors.",
+    cat:["windows"], os:"win", osLabel:"Windows · PS", admin:true,
+    note:"CMD equivalent: net stop spooler  then  net start spooler", warn:true
+  },
+  {
+    title:"Clear stuck print jobs",
+    cmd:"net stop spooler\ndel /f /q \"%systemroot%\\System32\\spool\\PRINTERS\\*.*\"\nnet start spooler",
+    desc:"Command Prompt (Admin): resets a stuck queue. Stops the spooler, removes pending job files, then starts it again.",
+    cat:["windows"], os:"win", osLabel:"Windows · CMD", admin:true,
+    note:"⚠ Deletes pending jobs for all printers on this PC. Run one line at a time; only delete after the spooler stops. Never delete driver files.", warn:true
+  },
+  {
+    title:"Remove a bad printer driver",
+    cmd:"rundll32 printui.dll,PrintUIEntry /s /t2",
+    desc:"Opens Print Server Properties → Drivers tab. Remove the faulty driver, then reinstall the latest one from the maker's site.",
+    cat:["windows"], os:"win", osLabel:"Windows", admin:true,
+    note:"⚠ Remove only the driver for the problem printer, and only after removing the printer itself.", warn:true
+  },
+  {
+    title:"List printers and the default",
+    cmd:"lpstat -p -d",
+    desc:"Terminal: shows installed printers, their state (idle / printing / disabled) and the current default printer.",
+    cat:["mac","linux"], os:"mac", osLabel:"macOS / Linux",
+    note:"If a printer shows “disabled”, re-enable it in Settings → Printers or the CUPS web UI (localhost:631)."
+  },
+  {
+    title:"Cancel all print jobs",
+    cmd:"cancel -a",
+    desc:"Terminal: cancels every job in every print queue. The quickest way to unstick a queue on macOS and Linux.",
+    cat:["mac","linux"], os:"mac", osLabel:"macOS / Linux",
+    note:"Add a printer name to cancel only that printer's jobs: cancel -a PrinterName"
+  },
+  {
+    title:"Restart the printing system (macOS)",
+    cmd:"sudo launchctl kickstart -k system/org.cups.cupsd",
+    desc:"Terminal: restarts the CUPS printing service on modern macOS — the macOS equivalent of restarting the spooler.",
+    cat:["mac"], os:"mac", osLabel:"macOS", admin:true,
+    note:"⚠ If problems persist, you can reset the whole printing system from Settings → Printers (right-click the list), but this removes all printers.", warn:true
+  },
+  {
+    title:"Full printing status",
+    cmd:"lpstat -t",
+    desc:"Terminal: one command for everything — scheduler state, default printer, devices, queues and pending jobs.",
+    cat:["linux"], os:"linux", osLabel:"Linux",
+    note:"“scheduler is running” is what you want to see on the first line."
+  },
+  {
+    title:"Detect connected printers",
+    cmd:"lpinfo -v",
+    desc:"Terminal: lists printer devices CUPS can see — USB, network (ipp, socket, lpd) and more. Great after plugging in a printer.",
+    cat:["linux"], os:"linux", osLabel:"Linux",
+    note:"Network printers may need a moment; try again after pinging the printer."
+  },
+  {
+    title:"Restart CUPS (Linux)",
+    cmd:"sudo systemctl restart cups",
+    desc:"Terminal: restarts the CUPS printing service. Fixes stuck queues and printers that stopped responding.",
+    cat:["linux"], os:"linux", osLabel:"Linux", admin:true,
+    note:"On some distros the service is named cupsd or cups.service — check with: systemctl list-units | grep cups", warn:true
+  }
+];
+
+const grid = document.getElementById('grid');
+const empty = document.getElementById('empty');
+const countEl = document.getElementById('count');
+const search = document.getElementById('search');
+const toast = document.getElementById('toast');
+let activeCat = 'all';
+let toastTimer;
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function render(){
+  const q = search.value.trim().toLowerCase();
+  const list = COMMANDS.filter(c => {
+    const catOk = activeCat === 'all' || c.cat.includes(activeCat);
+    const text = (c.title + ' ' + c.cmd + ' ' + c.desc + ' ' + c.note + ' ' + c.osLabel).toLowerCase();
+    return catOk && (!q || text.includes(q));
+  });
+  grid.innerHTML = list.map((c,i) => `
+    <article class="card">
+      <div class="card-top">
+        <h3>${esc(c.title)}</h3>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          ${c.admin ? '<span class="badge admin">Admin</span>' : ''}
+          <span class="badge ${c.os}">${esc(c.osLabel)}</span>
+        </div>
+      </div>
+      <p class="desc">${esc(c.desc)}</p>
+      <div class="cmd"><span>${esc(c.cmd)}</span><button type="button" class="copy" data-i="${COMMANDS.indexOf(c)}" title="Copy command" aria-label="Copy command: ${esc(c.title)}">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button></div>
+      <p class="note${c.warn ? ' warn' : ''}">${esc(c.note)}</p>
+    </article>`).join('');
+  countEl.textContent = list.length + ' command' + (list.length === 1 ? '' : 's');
+  empty.classList.toggle('show', list.length === 0);
+}
+
+grid.addEventListener('click', async e => {
+  const btn = e.target.closest('.copy');
+  if(!btn) return;
+  const text = COMMANDS[+btn.dataset.i].cmd;
+  try{
+    await navigator.clipboard.writeText(text);
+    ok(btn);
+  }catch{
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{
+      if(document.execCommand('copy')) ok(btn);
+      else showToast('Copy failed — select the text manually', true);
+    }catch{ showToast('Copy failed — select the text manually', true); }
+    ta.remove();
+  }
+});
+
+function ok(btn){
+  btn.classList.add('copied');
+  setTimeout(()=>btn.classList.remove('copied'),1400);
+  showToast('Copied to clipboard ✓');
+}
+
+function showToast(msg, err){
+  toast.textContent = msg;
+  toast.classList.toggle('err', !!err);
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove('show'),1800);
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c=>{c.classList.remove('active');c.setAttribute('aria-pressed','false');});
+    chip.classList.add('active');
+    chip.setAttribute('aria-pressed','true');
+    activeCat = chip.dataset.cat;
+    render();
+  });
+});
+
+search.addEventListener('input', render);
+document.addEventListener('keydown', e => {
+  if(e.key === '/' && document.activeElement !== search){ e.preventDefault(); search.focus(); }
+  if(e.key === 'Escape' && document.activeElement === search){ search.value=''; render(); search.blur(); }
+});
+
+render();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a55c83616dd61bd3',t:'MTc5Mzg4ODU3Mw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a55c83616dd61bd3',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
